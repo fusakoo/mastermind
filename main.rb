@@ -19,6 +19,8 @@
 # - reset the temporary array if not correct
 
 # Gameplay
+# 0. Ask player name & choice of role (be a 1.codebreaker or 2.codemaster)
+#
 # Phase1: vs CPU CM
 # 1. Provide game instruction
 # 2. Gets the user inputs for 4 guesses
@@ -42,3 +44,43 @@
 # 6. If 12 turns pass (which shouldn't be possible, shoudl be able to guess within <5 turns), game over
 #   - Edge case would be that the user kept on providing wrong feedback (prevent w/ repeated instruction)
 # 7. Ask user to play again or not
+
+class Mastermind
+  def play
+    ### Initialize the game
+    introduction
+    define_role
+    # if player =/= CM, computer.generate_code
+    # else, player.create_code
+    turn until over?
+  end
+
+  def introduction
+    # provide general overview of the game
+  end
+
+  def define_role
+    # defines the player's name and role
+  end
+
+  def turn
+    # guess
+    # check guess
+    # winner / won? / over?
+  end
+
+  def winner
+    # if won? && not over?
+  end
+
+  def won?
+    # have computer or player guessed the right combination?
+  end
+
+  def over?
+    # has the game reached turn 12?
+  end
+end
+
+game = Masteermind.new
+game.play
