@@ -1,31 +1,21 @@
 # This class will create a profile of player
 
-# store player data (name, role)
+# store player data (role)
 class Player
-  attr_accessor :name, :role
+  attr_accessor :role
 
-  def initialize(name, role)
-    @name = name
+  def initialize(role)
     @role = role
   end
 
   def create_code
     # let user create a code from 6 diff colors
+
+    secret_code = prompt_guess
   end
 
   def prompt_guess
     # let user guess a code
-  end
-end
-
-# This class will store the computer's logic as CM and CB
-
-class Computer
-  def generate_code
-    # computer generate a random code (1296 variations)
-  end
-
-  def guess_code
-    # using algorithm, computer guess the code
+    guess = gets.chomp.downcase.split(" ")
   end
 end

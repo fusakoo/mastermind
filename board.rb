@@ -9,5 +9,4 @@ class Board
   def display_board
     # display the current board status
   end
-
 end

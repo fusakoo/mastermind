@@ -45,6 +45,10 @@
 #   - Edge case would be that the user kept on providing wrong feedback (prevent w/ repeated instruction)
 # 7. Ask user to play again or not
 
+require_relative 'player'
+require_relative 'computer'
+require_relative 'board'
+
 class Mastermind
   def play
     ### Initialize the game
@@ -61,6 +65,22 @@ class Mastermind
 
   def define_role
     # defines the player's name and role
+    puts 'Would you like to play as Codebreaker or Codemaster?'
+    puts '- Codebreaker will guess the code computer came up with'
+    puts "- Codemaster will allow you to come up with a secret code computer will guess \n"
+    print 'Type [1] for Codebreaker or [2] for Codemaker: '
+    input = gets.chomp
+    until input == 1 || input == 2
+      print "Sorry, didn't catch that. \nType [1] for Codebreaker or [2] for Codemaker."
+      input = gets.chomp
+    end
+
+    if input == 1
+      new_player = Player.new('codebreaker')
+    elsif input == 2
+      new_player = Player.new('codemaster')
+    end
+    puts "Great, you will be #{new_player.role} for this game!"
   end
 
   def turn
@@ -82,5 +102,5 @@ class Mastermind
   end
 end
 
-game = Masteermind.new
+game = Mastermind.new
 game.play
