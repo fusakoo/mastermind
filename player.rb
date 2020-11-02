@@ -10,12 +10,13 @@ class Player
 
   def create_code
     # let user create a code from 6 diff colors
-
+    puts "user create code"
     secret_code = prompt_guess
   end
 
   def prompt_guess
     # let user guess a code
+    puts "user guess code"
     guess = gets.chomp.downcase.split(" ")
   end
 end

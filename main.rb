@@ -54,12 +54,18 @@ class Mastermind
     ### Initialize the game
     introduction
     define_role
+    if @player.role != 'codemaster'
+      Computer.generate_code
+    else
+      @player.create_code
+    end
     # if player =/= CM, computer.generate_code
     # else, player.create_code
     turn until over?
   end
 
   def introduction
+    puts "Introduction"
     # provide general overview of the game
   end
 
@@ -69,18 +75,18 @@ class Mastermind
     puts '- Codebreaker will guess the code computer came up with'
     puts "- Codemaster will allow you to come up with a secret code computer will guess \n"
     print 'Type [1] for Codebreaker or [2] for Codemaker: '
-    input = gets.chomp
+    input = gets.chomp.to_i
     until input == 1 || input == 2
-      print "Sorry, didn't catch that. \nType [1] for Codebreaker or [2] for Codemaker."
-      input = gets.chomp
+      print "Sorry, didn't catch that. \nType [1] for Codebreaker or [2] for Codemaker: "
+      input = gets.chomp.to_i
     end
 
     if input == 1
-      new_player = Player.new('codebreaker')
+      @player = Player.new('codebreaker')
     elsif input == 2
-      new_player = Player.new('codemaster')
+      @player = Player.new('codemaster')
     end
-    puts "Great, you will be #{new_player.role} for this game!"
+    puts "Great, you will be #{@player.role} for this game!"
   end
 
   def turn
