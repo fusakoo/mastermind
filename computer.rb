@@ -3,6 +3,9 @@
 class Computer
   def self.generate_code
     puts "comp generates code"
+
+    colors = ["red", "orange", "blue", "teal", "green", "purple"]
+    
     # computer generate a random code (1296 variations)
   end
 
