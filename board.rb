@@ -7,6 +7,11 @@ require_relative 'computer'
 
 class Board
   attr_accessor :solution, :guesses, :feedback
+  @colors = ["red", "orange", "blue", "teal", "green", "purple"]
+
+  class << self
+    attr_accessor :colors
+  end
 
   def initialize
     @solution = @secret_code

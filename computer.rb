@@ -1,13 +1,14 @@
 # This class will store the computer's logic as CM and CB
 
+require_relative 'board'
+
 class Computer
   def self.generate_code
     puts "comp generates code"
 
-    colors = ["red", "orange", "blue", "teal", "green", "purple"]
     @secret_code = Array.new()
     4.times do
-      random_color = colors.sample
+      random_color = Board.colors.sample
       @secret_code << random_color
     end
 
