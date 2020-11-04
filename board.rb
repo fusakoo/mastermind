@@ -2,11 +2,15 @@
 # Also display the board for user to see while playing
 
 require_relative 'feedback'
+require_relative 'code'
+require_relative 'computer'
 
 class Board
+  attr_accessor :solution, :guesses, :feedback
+
   def initialize
-    #@secret_code = code.new
-    #@guesses = Array.new(12, code.new)
+    @solution = @secret_code
+    @guesses = Array.new(12, Code.new("white", "white", "white", "white"))
     @feedback = Array.new(12, Feedback.new("white", "white", "white", "white"))
     # create an array for the board
   end
