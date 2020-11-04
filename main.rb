@@ -50,14 +50,25 @@ require_relative 'computer'
 require_relative 'board'
 
 class Mastermind
+  attr_accessor :gameboard, :win, :turns, :colors
+
+  def initialize
+    @board = Board.new
+    @win = false
+    @turns = 1
+    @code_colors = Board.code_colors
+  end
+
   def play
     ### Initialize the game
     introduction
     define_role
     if @player.role != 'codemaster'
       Computer.generate_code
+      @board.solution = Computer.secret_code
     else
       @player.create_code
+      @board.solution = Player.secret_code
     end
     # if player =/= CM, computer.generate_code
     # else, player.create_code
@@ -66,12 +77,13 @@ class Mastermind
 
   def introduction
     puts "Introduction"
+    @board.display_board
     # provide general overview of the game
   end
 
   def define_role
     # defines the player's name and role
-    puts 'Would you like to play as Codebreaker or Codemaster?'
+    puts '\nWould you like to play as Codebreaker or Codemaster?'
     puts '- Codebreaker will guess the code computer came up with'
     puts "- Codemaster will allow you to come up with a secret code computer will guess \n"
     print 'Type [1] for Codebreaker or [2] for Codemaker: '
@@ -86,10 +98,16 @@ class Mastermind
     elsif input == 2
       @player = Player.new('codemaster')
     end
-    puts "Great, you will be #{@player.role} for this game!"
+    puts "\nGreat, you will be #{@player.role} for this game!"
   end
 
   def turn
+    if @player.role == 'codebreaker'
+      #player guess
+    else
+      #computer guess
+    end
+
     # guess
     # check guess
     # winner / won? / over?

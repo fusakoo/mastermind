@@ -5,10 +5,14 @@ require_relative 'board'
 class Computer
   def self.generate_code
     puts "comp generates code"
+    @secret_code = Array.new
 
-    @secret_code = Array.new()
+    class << self
+      attr_accessor :secret_code
+    end
+
     4.times do
-      random_color = Board.colors.sample
+      random_color = Board.code_colors.sample
       @secret_code << random_color
     end
 
