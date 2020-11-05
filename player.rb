@@ -1,49 +1,59 @@
 # This class will create a profile of player
 
-require_relative 'computer'
+require_relative 'board'
+require 'colorize'
 
 # store player data (role)
 class Player
   attr_accessor :role
 
   class << self
-    attr_accessor :secret_code
+    attr_accessor :code
   end
 
   def initialize(role)
     @role = role
   end
 
-  def create_code
+  def self.create_code
     # let user create a code from 6 diff colors
-    puts "\nYou will now be setting the secret code computer will try to guess."
-    puts "Enter a combination of 4 colors separated by space. You may repeat colors."
-    puts "Your choices are: red, orange, blue, teal, green, and purple."
-    puts "- Example code: 'red red blue teal'"
-    print "\nPlease enter your secret code: "
-    @secret_code = get_choice
+    puts "\n You will now be setting the secret code computer will try to guess."
+    puts " Enter a combination of 4 colors separated by space. You may repeat colors."
+    puts " Your choices are: #{colorize_choices(Board.code_colors)}."
+    puts " - Example code: #{colorize_choices(%w[red red blue cyan])}"
+    print "\n Please enter your secret code: "
+    get_player_guess
   end
 
-  def prompt_guess
+  def self.prompt_guess
     # let user guess a code
-    puts @Player.role == 'codebreaker' ? "\n What's your guess?" : "\n Computer, what's your guess?"
-    get_choice
+    puts " Color options: #{colorize_choices(Board.code_colors)}."
+    print " Codebreaker, what's your guess? "
+    get_player_guess
   end
 
-  def get_choice
+  def self.get_player_guess
     1.times do
-      choice = gets.chomp.downcase.split(" ")
+      @code = gets.chomp.downcase.split(" ")
 
-      if choice.length != 4
-        print "\nSorry, you have to select 4 colors. Try again: "
+      if @code.length != 4
+        print "\n Sorry, you have to select 4 colors. Try again: "
         redo
       end
 
       color_choices = Board.code_colors
-      if !color_choices.include?(choice[0]) || !color_choices.include?(choice[1]) || !color_choices.include?(choice[2]) || !color_choices.include?(choice[3])
-        print "\nYou can only enter the colors specified. Try again: "
+      if !color_choices.include?(@code[0]) || !color_choices.include?(@code[1]) || !color_choices.include?(@code[2]) || !color_choices.include?(@code[3])
+        print "\n You can only enter the colors specified. Try again: "
         redo
       end
+
+      @code
     end
+  end
+
+  def self.colorize_choices(array)
+    colors = []
+    array.each { |color| colors.push(color.public_send(color.to_sym)) }
+    colors.join(" ")
   end
 end

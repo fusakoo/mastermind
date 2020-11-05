@@ -10,7 +10,7 @@ require 'colorize'
 # Also display the board for user to see while playing
 class Board
   attr_accessor :solution, :guesses, :feedback
-  @code_colors = %w[red orange blue teal green purple]
+  @code_colors = %w[red yellow blue cyan green magenta]
 
   class << self
     attr_accessor :code_colors
@@ -25,16 +25,25 @@ class Board
 
   def display_board
     # display the current board status
-    puts "     ____________________   + reflects the guesses"
-    puts "    [                    ]  * reflects the feedback"
+    puts "\n       ____________________   + reflects the guesses"
+    puts "      [                    ]  * reflects the feedback"
     @guesses.each_with_index do |guess, index|
       if index > 8
-        puts " #{index + 1} | #{colorize(guess, true)} || #{colorize(@feedback[index], false)} |"
+        puts "  #{index + 1}  | #{colorize(guess, true)} || #{colorize(@feedback[index], false)} |"
       else
-        puts " #{index + 1}  | #{colorize(guess, true)} || #{colorize(@feedback[index], false)} |"
+        puts "  #{index + 1}   | #{colorize(guess, true)} || #{colorize(@feedback[index], false)} |"
       end
     end
-    puts "    [____________________]"
+    puts "      [____________________]"
+  end
+
+  def update_board(index)
+    check_guess(index)
+    display_board
+  end
+
+  def check_guess(index)
+    #
   end
 
   def colorize(array, is_code)

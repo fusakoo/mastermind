@@ -49,8 +49,10 @@ require_relative 'player'
 require_relative 'computer'
 require_relative 'board'
 
+require 'pry'
+
 class Mastermind
-  attr_accessor :gameboard, :win, :turns, :colors
+  attr_accessor :board, :win, :turns, :colors
 
   def initialize
     @board = Board.new
@@ -66,9 +68,11 @@ class Mastermind
     if @player.role != 'codemaster'
       Computer.generate_code
       @board.solution = Computer.secret_code
+      puts " Secret code is #{@board.solution}"
     else
-      @player.create_code
-      @board.solution = Player.secret_code
+      Player.create_code
+      @board.solution = Player.code
+      puts " Secret code is #{@board.solution}"
     end
     # if player =/= CM, computer.generate_code
     # else, player.create_code
@@ -76,20 +80,20 @@ class Mastermind
   end
 
   def introduction
-    puts "Introduction"
+    puts " Introduction"
     @board.display_board
     # provide general overview of the game
   end
 
   def define_role
     # defines the player's name and role
-    puts '\nWould you like to play as Codebreaker or Codemaster?'
-    puts '- Codebreaker will guess the code computer came up with'
-    puts "- Codemaster will allow you to come up with a secret code computer will guess \n"
-    print 'Type [1] for Codebreaker or [2] for Codemaker: '
+    puts "\n Would you like to play as Codebreaker or Codemaster?"
+    puts ' - Codebreaker will guess the code computer came up with'
+    puts " - Codemaster will allow you to come up with a secret code computer will guess \n"
+    print ' Type [1] for Codebreaker or [2] for Codemaker: '
     input = gets.chomp.to_i
     until input == 1 || input == 2
-      print "Sorry, didn't catch that. \nType [1] for Codebreaker or [2] for Codemaker: "
+      print " Sorry, didn't catch that. \nType [1] for Codebreaker or [2] for Codemaker: "
       input = gets.chomp.to_i
     end
 
@@ -98,19 +102,35 @@ class Mastermind
     elsif input == 2
       @player = Player.new('codemaster')
     end
-    puts "\nGreat, you will be #{@player.role} for this game!"
+    puts "\n Great, you will be #{@player.role} for this game!"
   end
 
   def turn
-    if @player.role == 'codebreaker'
-      #player guess
-    else
-      #computer guess
+    while @turns < 13
+      puts "\n **Turn #{@turns}**"
+      choice = ask_guess
+      puts " You've entered #{choice}"
+      update_guess(choice)
+      @turns += 1
     end
-
     # guess
     # check guess
     # winner / won? / over?
+  end
+
+  def ask_guess
+    if @player.role == 'codebreaker'
+      Player.prompt_guess
+      guess = Player.code
+    else
+      guess = Computer.guess_code
+    end
+    guess
+  end
+
+  def update_guess(choice)
+    board.guesses[12 - @turns] = Code.new(choice[0], choice[1], choice[2], choice[3])
+    board.update_board(12 - @turns)
   end
 
   def winner
