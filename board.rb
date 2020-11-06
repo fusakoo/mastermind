@@ -19,7 +19,7 @@ class Board
   def initialize
     @solution = solution
     @guesses = Array.new(12, Code.new('white', 'white', 'white', 'white'))
-    @feedback = Array.new(12, Feedback.new('white', 'white', 'white', 'white'))
+    @feedback = Array.new(12, Feedback.new('black', 'black', 'black', 'black'))
     # create an array for the board
   end
 
@@ -37,13 +37,31 @@ class Board
     puts "      [____________________]"
   end
 
-  def update_board(index)
-    check_guess(index)
+  def update_board(turn)
+    check_guess(turn)
     display_board
+    puts "\n #{@correct_pegs} peg(s) in the correct position and correct color." if @correct_pegs > 0
+    puts " #{@wrong_position_pegs} peg(s) in the correct color BUT wrong position." if @wrong_position_pegs > 0
+    puts "\n None of the colors matched those from the secret code. Try again." if @correct_pegs < 1 && @wrong_position_pegs < 1
   end
 
-  def check_guess(index)
-    #
+  def check_guess(turn)
+    @correct_pegs = 0
+    @guesses[turn].colors.each_with_index do |color, index|
+      @correct_pegs += 1 if @solution[index] == color
+    end
+
+    @wrong_position_pegs = @guesses[turn].colors.select { |color| @solution.include?(color) == true }.uniq.length - @correct_pegs
+
+    pegs = []
+
+    @correct_pegs.times { pegs << 'red' }
+
+    @wrong_position_pegs.times { pegs << 'white' }
+
+    pegs << 'black' until pegs.length == 4
+
+    @feedback[turn] = Feedback.new(pegs[0], pegs[1], pegs[2], pegs[3])
   end
 
   def colorize(array, is_code)

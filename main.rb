@@ -56,7 +56,6 @@ class Mastermind
 
   def initialize
     @board = Board.new
-    @win = false
     @turns = 1
     @code_colors = Board.code_colors
   end
@@ -88,9 +87,9 @@ class Mastermind
   def define_role
     # defines the player's name and role
     puts "\n Would you like to play as Codebreaker or Codemaster?"
-    puts ' - Codebreaker will guess the code computer came up with'
-    puts " - Codemaster will allow you to come up with a secret code computer will guess \n"
-    print ' Type [1] for Codebreaker or [2] for Codemaker: '
+    puts " - Codebreaker will guess the code computer came up with"
+    puts " - Codemaster will allow you to come up with a secret code computer will guess"
+    print "\n Type [1] for Codebreaker or [2] for Codemaker: "
     input = gets.chomp.to_i
     until input == 1 || input == 2
       print " Sorry, didn't catch that. \nType [1] for Codebreaker or [2] for Codemaker: "
@@ -109,7 +108,7 @@ class Mastermind
     while @turns < 13
       puts "\n **Turn #{@turns}**"
       choice = ask_guess
-      puts " You've entered #{choice}"
+      puts " You've entered: #{choice.join(", ")}"
       update_guess(choice)
       @turns += 1
     end
@@ -129,12 +128,8 @@ class Mastermind
   end
 
   def update_guess(choice)
-    board.guesses[12 - @turns] = Code.new(choice[0], choice[1], choice[2], choice[3])
-    board.update_board(12 - @turns)
-  end
-
-  def winner
-    # if won? && not over?
+    board.guesses[@turns - 1] = Code.new(choice[0], choice[1], choice[2], choice[3])
+    board.update_board(@turns - 1)
   end
 
   def won?

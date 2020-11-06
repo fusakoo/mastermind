@@ -22,17 +22,17 @@ class Player
     puts " Your choices are: #{colorize_choices(Board.code_colors)}."
     puts " - Example code: #{colorize_choices(%w[red red blue cyan])}"
     print "\n Please enter your secret code: "
-    get_player_guess
+    input_guess
   end
 
   def self.prompt_guess
     # let user guess a code
     puts " Color options: #{colorize_choices(Board.code_colors)}."
     print " Codebreaker, what's your guess? "
-    get_player_guess
+    input_guess
   end
 
-  def self.get_player_guess
+  def self.input_guess
     1.times do
       @code = gets.chomp.downcase.split(" ")
 
