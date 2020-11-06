@@ -9,9 +9,14 @@ V1: Codebreaker mode available now (10/06/2020)
 ### TODO
 - Implement Codemaker mode (vs Computer)
 
-### Bug log 
-- Codemaker mode: undefined method bug 
+---
 
+### Gems used
+- [Colorize](https://github.com/fazibear/colorize): Ruby string extension using ANSI escape sequence to color texts.
+
+---
+
+### Bug Log
 
 ### Things I learned
 - Better understanding of accessing variables in different classes (@ and @@ variables)
