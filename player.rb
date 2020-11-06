@@ -1,9 +1,7 @@
-# This class will create a profile of player
-
 require_relative 'board'
 require 'colorize'
 
-# store player data (role)
+# store player data (role) and methods
 class Player
   attr_accessor :role
 

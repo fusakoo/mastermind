@@ -1,7 +1,6 @@
-# This class will store the computer's logic as CM and CB
-
 require_relative 'board'
 
+# This class will store the computer's logic as CM and CB
 class Computer
   class << self
     attr_accessor :secret_code

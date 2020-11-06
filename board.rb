@@ -2,15 +2,14 @@ require_relative 'feedback'
 require_relative 'code'
 require_relative 'computer'
 require_relative 'player'
-
-# utilize the colorize gem
-require 'colorize'
+require_relative 'colorize'
 
 # This class will create the board w/ nested array
 # Also display the board for user to see while playing
 class Board
   attr_accessor :solution, :guesses, :feedback
   @code_colors = %w[red yellow blue cyan green magenta]
+  include Colorize
 
   class << self
     attr_accessor :code_colors
@@ -29,9 +28,9 @@ class Board
     puts "      [                    ]  * reflects the feedback"
     @guesses.each_with_index do |guess, index|
       if index > 8
-        puts "  #{index + 1}  | #{colorize(guess, true)} || #{colorize(@feedback[index], false)} |"
+        puts "  #{index + 1}  | #{colorize_display(guess, true)} || #{colorize_display(@feedback[index], false)} |"
       else
-        puts "  #{index + 1}   | #{colorize(guess, true)} || #{colorize(@feedback[index], false)} |"
+        puts "  #{index + 1}   | #{colorize_display(guess, true)} || #{colorize_display(@feedback[index], false)} |"
       end
     end
     puts "      [____________________]"
@@ -62,12 +61,5 @@ class Board
     pegs << 'black' until pegs.length == 4
 
     @feedback[turn] = Feedback.new(pegs[0], pegs[1], pegs[2], pegs[3])
-  end
-
-  def colorize(array, is_code)
-    colors = []
-    symbol = is_code ? "+" : "*"
-    array.colors.each { |color| colors.push(symbol.public_send(color.to_sym)) }
-    colors.join(" ")
   end
 end

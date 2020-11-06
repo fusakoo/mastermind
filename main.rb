@@ -48,6 +48,9 @@
 require_relative 'player'
 require_relative 'computer'
 require_relative 'board'
+require_relative 'feedback'
+
+require_relative 'colorize'
 
 require 'pry'
 
@@ -64,18 +67,9 @@ class Mastermind
     ### Initialize the game
     introduction
     define_role
-    if @player.role != 'codemaster'
-      Computer.generate_code
-      @board.solution = Computer.secret_code
-      puts " Secret code is #{@board.solution}"
-    else
-      Player.create_code
-      @board.solution = Player.code
-      puts " Secret code is #{@board.solution}"
-    end
-    # if player =/= CM, computer.generate_code
-    # else, player.create_code
+    set_secret_code
     turn until over?
+    result
   end
 
   def introduction
@@ -104,17 +98,24 @@ class Mastermind
     puts "\n Great, you will be #{@player.role} for this game!"
   end
 
-  def turn
-    while @turns < 13
-      puts "\n **Turn #{@turns}**"
-      choice = ask_guess
-      puts " You've entered: #{choice.join(", ")}"
-      update_guess(choice)
-      @turns += 1
+  def set_secret_code
+    if @player.role != 'codemaster'
+      Computer.generate_code
+      @board.solution = Computer.secret_code
+      puts " Secret code is #{@board.solution}"
+    else
+      Player.create_code
+      @board.solution = Player.code
+      puts " Secret code is #{@board.solution}"
     end
-    # guess
-    # check guess
-    # winner / won? / over?
+  end
+
+  def turn
+    puts "\n **Turn #{@turns}**"
+    choice = ask_guess
+    puts " You've entered: #{choice.join(", ")}"
+    update_guess(choice)
+    @turns += 1
   end
 
   def ask_guess
@@ -133,11 +134,24 @@ class Mastermind
   end
 
   def won?
-    # have computer or player guessed the right combination?
+    if @turns < 2
+      false
+    else
+      board.guesses[@turns - 2].colors == board.solution
+    end
   end
 
   def over?
-    # has the game reached turn 12?
+    won? || @turns > 12
+  end
+
+  def result
+    if won?
+      puts "\n Codebreaker has cracked the secret code!"
+    elsif @turns > 12
+      puts "\n Codebreaker was unable to crack the code."
+      puts " The secret code was: #{board.solution.join(" ")}"
+    end
   end
 end
 
