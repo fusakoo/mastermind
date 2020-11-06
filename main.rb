@@ -2,60 +2,17 @@
 # Codemaker: create 4 color combination (color can be repeated ; 6^4 = 1296 possibilities)
 # Codebreaker: guess within 12 turns the combination
 
-# 6 color codepegs: red, orange, blue, teal, green, purple
-# Clues: ! for correct position/color, ? for correct color/wrong position, blank for incorrect
-# - Q: should the feedback be provided in order, or at random? (if latter, need to randomnize response)
-
-# Computer algorithm
-# Codemaker: just create a random 4 color combination
-# - need an algorithm to properly provide feedback/clues
-
-# Codebreaker: can start off by 2-2 pattern
-
-# Initial ideas
-# 4 color combo will be an array (i.e. ["red", "red", "teal", "purple"]
-# CPU as CM: Take user input with gets (either one color per line, or all at once)
-# - store the user input into temporary array
-# - reset the temporary array if not correct
-
-# Gameplay
-# 0. Ask player name & choice of role (be a 1.codebreaker or 2.codemaster)
-#
-# Phase1: vs CPU CM
-# 1. Provide game instruction
-# 2. Gets the user inputs for 4 guesses
-#   - Convert inputs into array
-# 3. Compare the user inputs with the code
-# 4. Provide feedback/clues
-#   - IF guessed correct, game is finished (go to step 6)
-#   - ELSE loop 2,3,4 until 5
-# 5. Once 12 turns/loops are complete, game over
-# 6. Ask user to play again or not
-
-# Phase2: vs CPU CB
-# 1. Provide game instruction
-# 2. Gets user input for the code
-# 3. Run CPU guessing algorithm for first guess
-#   - IF bot guesses correctly, game is finished (go to step 7)
-# 4. Let user provide feedback
-# 5. Run CPU guessing algorithm again
-#   - IF bot guesses correctly, game is finished
-#   - ELSE loop 3,4,5 until 6
-# 6. If 12 turns pass (which shouldn't be possible, shoudl be able to guess within <5 turns), game over
-#   - Edge case would be that the user kept on providing wrong feedback (prevent w/ repeated instruction)
-# 7. Ask user to play again or not
-
 require_relative 'player'
 require_relative 'computer'
 require_relative 'board'
 require_relative 'feedback'
-
 require_relative 'colorize'
 
 require 'pry'
 
 class Mastermind
-  attr_accessor :board, :win, :turns, :colors
+  attr_accessor :board, :turns, :code_colors
+  include Colorization
 
   def initialize
     @board = Board.new
@@ -73,16 +30,31 @@ class Mastermind
   end
 
   def introduction
-    puts " Introduction"
+    puts " --------------------------------------------------------------------"
+    puts " ╔╦╗┌─┐┌─┐┌┬┐┌─┐┬─┐┌┬┐┬┌┐┌┌┬┐"
+    puts " ║║║├─┤└─┐ │ ├┤ ├┬┘│││││││ ││"
+    puts " ╩ ╩┴ ┴└─┘ ┴ └─┘┴└─┴ ┴┴┘└┘─┴┘"
+    puts " --------------------------------------------------------------------"
+    puts "\n Play as the Codebreaker to guess the code, or play as Codemaster to make unbreakable code!"
+    puts " Both Player and Computer must guess the secret code within 12 turns to win."
+    puts " Left side of the board displays the guesses to the code,"
+    puts " while the Right side will display the feedback to the guesses."
+
+    puts "\n Feedback peg (*) reference: "
+    puts " #{colorize_string('*', 'red')} Red: a guess is in the correct position and correct color"
+    puts " #{colorize_string('*', 'white')} White: a guess is the correct color BUT in the wrong position"
+    puts " #{colorize_string('*', 'black')} Black: a guess is neither correct in color / position"
+
     @board.display_board
     # provide general overview of the game
   end
 
   def define_role
     # defines the player's name and role
+    puts "\n --------------------------------------------------------------------"
     puts "\n Would you like to play as Codebreaker or Codemaster?"
-    puts " - Codebreaker will guess the code computer came up with"
-    puts " - Codemaster will allow you to come up with a secret code computer will guess"
+    puts " - Codebreaker: guess the secret code computer came up with"
+    puts " - Codemaster: come up with a secret code and computer will try to guess it"
     print "\n Type [1] for Codebreaker or [2] for Codemaker: "
     input = gets.chomp.to_i
     until input == 1 || input == 2
@@ -95,33 +67,36 @@ class Mastermind
     elsif input == 2
       @player = Player.new('codemaster')
     end
-    puts "\n Great, you will be #{@player.role} for this game!"
+
+    puts "\n Great, you will be #{@player.role.capitalize} for this game!"
   end
 
   def set_secret_code
     if @player.role != 'codemaster'
       Computer.generate_code
       @board.solution = Computer.secret_code
-      puts " Secret code is #{@board.solution}"
+      # Debug purpose only
+      # puts " Secret code is #{colorize_choices(board.solution)}"
     else
-      Player.create_code
-      @board.solution = Player.code
-      puts " Secret code is #{@board.solution}"
+      @player.create_code
+      @board.solution = @player.code
+      puts " Secret code is #{colorize_choices(board.solution)}"
     end
   end
 
   def turn
+    puts "\n --------------------------------------------------------------------"
     puts "\n **Turn #{@turns}**"
     choice = ask_guess
-    puts " You've entered: #{choice.join(", ")}"
+    puts " You've entered: #{colorize_choices(choice)}"
     update_guess(choice)
     @turns += 1
   end
 
   def ask_guess
     if @player.role == 'codebreaker'
-      Player.prompt_guess
-      guess = Player.code
+      @player.prompt_guess
+      guess = @player.code
     else
       guess = Computer.guess_code
     end
@@ -150,7 +125,8 @@ class Mastermind
       puts "\n Codebreaker has cracked the secret code!"
     elsif @turns > 12
       puts "\n Codebreaker was unable to crack the code."
-      puts " The secret code was: #{board.solution.join(" ")}"
+      puts " The secret code was: #{colorize_choices(board.solution)}"
+      puts nil
     end
   end
 end

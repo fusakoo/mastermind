@@ -9,7 +9,7 @@ require_relative 'colorize'
 class Board
   attr_accessor :solution, :guesses, :feedback
   @code_colors = %w[red yellow blue cyan green magenta]
-  include Colorize
+  include Colorization
 
   class << self
     attr_accessor :code_colors
@@ -24,8 +24,8 @@ class Board
 
   def display_board
     # display the current board status
-    puts "\n       ____________________   + reflects the guesses"
-    puts "      [                    ]  * reflects the feedback"
+    puts "\n       ____________________   + reflect the guesses"
+    puts "      [                    ]  * reflect the feedback"
     @guesses.each_with_index do |guess, index|
       if index > 8
         puts "  #{index + 1}  | #{colorize_display(guess, true)} || #{colorize_display(@feedback[index], false)} |"

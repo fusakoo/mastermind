@@ -1,36 +1,36 @@
 require_relative 'board'
+require_relative 'colorize'
+
 require 'colorize'
 
 # store player data (role) and methods
 class Player
-  attr_accessor :role
-
-  class << self
-    attr_accessor :code
-  end
+  attr_accessor :role, :code
+  include Colorization
 
   def initialize(role)
     @role = role
   end
 
-  def self.create_code
+  def create_code
     # let user create a code from 6 diff colors
+    puts "\n --------------------------------------------------------------------"
     puts "\n You will now be setting the secret code computer will try to guess."
     puts " Enter a combination of 4 colors separated by space. You may repeat colors."
-    puts " Your choices are: #{colorize_choices(Board.code_colors)}."
+    puts " Your choices are: #{colorize_choices(Board.code_colors)}"
     puts " - Example code: #{colorize_choices(%w[red red blue cyan])}"
     print "\n Please enter your secret code: "
     input_guess
   end
 
-  def self.prompt_guess
+  def prompt_guess
     # let user guess a code
-    puts " Color options: #{colorize_choices(Board.code_colors)}."
+    puts " Color options: #{colorize_choices(Board.code_colors)}"
     print " Codebreaker, what's your guess? "
     input_guess
   end
 
-  def self.input_guess
+  def input_guess
     1.times do
       @code = gets.chomp.downcase.split(" ")
 
@@ -47,11 +47,5 @@ class Player
 
       @code
     end
-  end
-
-  def self.colorize_choices(array)
-    colors = []
-    array.each { |color| colors.push(color.public_send(color.to_sym)) }
-    colors.join(" ")
   end
 end
