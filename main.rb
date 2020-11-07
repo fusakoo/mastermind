@@ -88,7 +88,7 @@ class Mastermind
     puts "\n --------------------------------------------------------------------"
     puts "\n **Turn #{@turns}**"
     choice = ask_guess
-    puts " You've entered: #{colorize_choices(choice)}"
+    puts "\n Code has been entered: #{colorize_choices(choice)}"
     update_guess(choice)
     @turns += 1
   end
@@ -98,7 +98,8 @@ class Mastermind
       @player.prompt_guess
       guess = @player.code
     else
-      guess = Computer.guess_code
+      Computer.guess_code(board.feedback, @turns)
+      guess = Computer.code
     end
     guess
   end

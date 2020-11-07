@@ -1,8 +1,10 @@
 # Mastermind
 CLI-based [Mastermind](https://en.wikipedia.org/wiki/Mastermind_(board_game)) game built in Ruby.
 
+---
+
 ### Features
-V1: Codebreaker mode available now (10/06/2020)
+V1: Codebreaker mode now available (10/06/2020)
 - 12-turn based Mastermind game with feedback mechanism
 - Colorized pegs using the Colorize gem
 
