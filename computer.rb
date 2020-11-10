@@ -3,8 +3,10 @@ require_relative 'colorize'
 
 # This class will store the computer's logic as CM and CB
 class Computer
-  # @@guess_index = 0
-  # @@correct_combo = []
+  @guess_index = 0
+  @code = Array.new
+  @correct_set = Array.new
+  @bingo_colors = %w[red white]
 
   class << self
     attr_accessor :secret_code, :code
@@ -29,27 +31,45 @@ class Computer
   end
 
   def self.guess_code(feedback, turn)
-    # guess_combination = []
-
-    # if @@correct_combo.length != 4
-    #   case turn
-    #   when 1
-    #     2.times {guess_combination << Board.code_colors[@@guess_index]}
-    #     2.times {guess_combination << Board.code_colors[@@guess_index + 1]}
-
-    #     @@guess_index += 1
-    #   when (2..8)
-
     print " Computer is guessing the code"
     3.times do
       print '.'
       sleep(0.7)
     end
 
-    #temporary logic to test if the other dependencies are working
-    @code = Array.new
-    4.times do
-      @code << Board.code_colors.sample
+    while turn < 13
+      if turn == 1
+        # start off the guess by 4 reds, and go from there
+        4.times do
+          @code << Board.code_colors[@guess_index]
+        end
+        @guess_index += 1
+        return @code
+      elsif @correct_set.length != 4 && turn < 13
+        # check the feedback on each guess. If correct, sort into the correct peg set
+        feedback[turn - 2].colors.each_with_index do |color, index|
+          @correct_set << @code[index] if @bingo_colors.include?(color)
+        end
+        self.reset_code
+        @correct_set.each do |color|
+          @code << color
+        end
+        @code << Board.code_colors[@guess_index] until @code.length == 4
+        @guess_index += 1
+        self.reset_correct_set if @correct_set.length != 4
+        return @code
+      else
+        # shuffle the correct peg set of colors so the position can be found
+        @correct_set.shuffle
+      end
     end
+  end
+
+  def self.reset_code
+    @code = []
+  end
+
+  def self.reset_correct_set
+    @correct_set = []
   end
 end

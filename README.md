@@ -19,6 +19,12 @@ V1: Codebreaker mode now available (10/06/2020)
 ---
 
 ### Bug Log
+There's currently a conflict between the computer codebreaker logic vs board feedback logic
+Example: if the secret code is 'red yellow red yellow', the feedback for 'red red yellow yellow' is two red pegs (2 correct position)
+The current computer logic will not be able to guess/resolve if the feedback isn't 2 red pegs, 2 white pegs
+However, the feedback logic according to official rule will not grant pegs for the 2 middle 'red yellow' since they're duplicate
+- This currently prevents any secret code that switches the order of color from the provided color scheme
+- i.e. 'red red blue blue' can be solved, but 'blue red red red' cannot be solved.
 
 ### Things I learned
 - Better understanding of accessing variables in different classes (@ and @@ variables)
