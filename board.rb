@@ -75,6 +75,5 @@ class Board
     @current_guess = @current_guess.compact
     @temporary_solution = @temporary_solution.compact
     @wrong_position_pegs = @temporary_solution.intersection(@current_guess).length
-    return @wrong_position_pegs
   end
 end
