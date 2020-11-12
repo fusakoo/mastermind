@@ -31,6 +31,7 @@ Currently it's not the smartest. It will shuffle through the guess with 4 red/wh
 
 ### Gems used
 - [Colorize](https://github.com/fazibear/colorize): Ruby string extension using ANSI escape sequence to color texts.
+- [Bundler](https://bundler.io/): track & install gems (for repo clones).
 
 ---
 
