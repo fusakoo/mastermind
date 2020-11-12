@@ -4,10 +4,10 @@ require_relative 'colorize'
 # This class will store the computer's logic as CM and CB
 class Computer
   @guess_index = 0
-  @code = Array.new
-  @correct_set = Array.new
+  @code = []
+  @correct_set = []
+  @past_shuffle = []
   @bingo_colors = %w[red white]
-  @past_shuffle = Array.new
 
   class << self
     attr_accessor :secret_code, :code
@@ -15,11 +15,8 @@ class Computer
 
   def self.generate_code
     print " Computer is generating the code"
-    3.times do
-      print '.'
-      sleep(0.7)
-    end
-    @secret_code = Array.new
+    self.print_dots
+    @secret_code = []
 
     4.times do
       random_color = Board.code_colors.sample
@@ -33,10 +30,7 @@ class Computer
 
   def self.guess_code(feedback, turn)
     print " Computer is guessing the code"
-    3.times do
-      print '.'
-      sleep(0.5)
-    end
+    self.print_dots
 
     while turn < 13
       if turn == 1
@@ -88,5 +82,12 @@ class Computer
 
   def self.reset_correct_set
     @correct_set = []
+  end
+
+  def self.print_dots
+    3.times do
+      print '.'
+      sleep(0.6)
+    end
   end
 end
