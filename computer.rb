@@ -7,6 +7,7 @@ class Computer
   @code = Array.new
   @correct_set = Array.new
   @bingo_colors = %w[red white]
+  @past_shuffle = Array.new
 
   class << self
     attr_accessor :secret_code, :code
@@ -34,7 +35,7 @@ class Computer
     print " Computer is guessing the code"
     3.times do
       print '.'
-      sleep(0.7)
+      sleep(0.5)
     end
 
     while turn < 13
@@ -44,30 +45,39 @@ class Computer
           @code << Board.code_colors[@guess_index]
         end
         @guess_index += 1
-        return @code
-      elsif @correct_set.length != 4 && turn < 13
-        # TODO: Need to make sure white feedback gets actually utilized
-        # Currently if the number of red decreases, it assumes the worst
-
+      elsif @shuffle_guesses
+        @code = @code.shuffle while @past_shuffle.include?(@code)
+        @past_shuffle << @code
+      elsif feedback[turn - 2].colors.include?('black')
         # check the feedback on each guess. If correct, sort into the correct peg set
-        if feedback[turn - 2].colors.count('red') > feedback[turn - 3].colors.count('red')
-          self.reset_correct_set
-          feedback[turn - 2].colors.each_with_index do |color, index|
-            @correct_set << @code[index] if @bingo_colors.include?(color)
-          end
-        end
+        self.update_correct_set(feedback, turn)
         self.reset_code
+
         @correct_set.each do |color|
           @code << color
         end
         @code << Board.code_colors[@guess_index] until @code.length == 4
         @guess_index += 1
-        return @code
-      elsif @correct_set.length == 4 && turn < 13
-        # TODO: This needs to actually trigger either when feedback no longer include 'black'
-        # or if we can properly reflect the correct_set with 4 values
-        # shuffle the correct peg set of colors so the position can be found
-        @correct_set.shuffle
+      else
+        @shuffle_guesses = true
+        @past_shuffle << @code
+        @code = @code.shuffle while @past_shuffle.include?(@code)
+        @past_shuffle << @code
+      end
+      return @code
+    end
+  end
+
+  # helper method to count multiple values in array
+  def self.count_all(array, values_to_count)
+    array.count { |value| values_to_count.include?(value) }
+  end
+
+  def self.update_correct_set(feedback, turn)
+    if self.count_all(feedback[turn - 2].colors, @bingo_colors) > self.count_all(feedback[turn - 3].colors, @bingo_colors)
+      self.reset_correct_set
+      feedback[turn - 2].colors.each_with_index do |color, index|
+        @correct_set << @code[index] if @bingo_colors.include?(color)
       end
     end
   end
