@@ -32,7 +32,7 @@ class Player
 
   def input_guess
     1.times do
-      @code = gets.chomp.downcase.split(" ")
+      @code = gets.chomp.downcase.split(' ')
 
       if @code.length != 4
         print "\n Sorry, you have to select 4 colors. Try again: "

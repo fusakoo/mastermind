@@ -42,7 +42,7 @@ class Mastermind
 
   def explain_instruction
     puts "\n Play as the Codebreaker to guess the code, or"
-    puts ' play as the Codemaster to create an unbreakable code!'
+    puts ' play as the Codemaker to create an unbreakable code!'
     puts "\n Both Player and Computer must guess the secret code within 12 turns to win."
     puts ' - Left side of the board displays the guesses to the code'
     puts ' - Right side will display the feedback to the guesses'
@@ -58,13 +58,13 @@ class Mastermind
   def define_role
     # defines the player's name and role
     puts "\n --------------------------------------------------------------------"
-    puts "\n Would you like to play as Codebreaker or Codemaster?"
+    puts "\n Would you like to play as Codebreaker or Codemaker?"
     puts ' - Codebreaker: guess the secret code computer came up with'
-    puts ' - Codemaster: come up with a secret code and computer will try to guess it'
-    print "\n Type [1] for Codebreaker or [2] for Codemaster: "
+    puts ' - Codemaker: come up with a secret code and computer will try to guess it'
+    print "\n Type [1] for Codebreaker or [2] for Codemaker: "
     input = gets.chomp.to_i
     until input == 1 || input == 2
-      print " Sorry, didn't catch that. \nType [1] for Codebreaker or [2] for Codemaster: "
+      print " Sorry, didn't catch that. \nType [1] for Codebreaker or [2] for Codemaker: "
       input = gets.chomp.to_i
     end
 
@@ -76,12 +76,12 @@ class Mastermind
     if input == 1
       @player = Player.new('codebreaker')
     elsif input == 2
-      @player = Player.new('codemaster')
+      @player = Player.new('codemaker')
     end
   end
 
   def set_secret_code
-    if @player.role != 'codemaster'
+    if @player.role != 'codemaker'
       Computer.generate_code
       @board.solution = Computer.secret_code
       # Debug purpose only
