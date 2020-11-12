@@ -3,6 +3,16 @@ CLI-based [Mastermind](https://en.wikipedia.org/wiki/Mastermind_(board_game)) ga
 
 ---
 
+### Installation
+Using your Terminal/Command Line, clone the repository into your local Ruby workspace.
+```
+git clone https://github.com/fusakoo/mastermind.git
+cd mastermind
+bundle install
+ruby main.rb
+```
+---
+
 ### Features
 V2: Codemaker mode now available (10/11/2020)
 - Players can now come up with a code and challenge Computer to guess the secret code
