@@ -40,7 +40,8 @@ class Mastermind
   end
 
   def explain_instruction
-    puts "\n Play as the Codebreaker to guess the code, or play as Codemaster to make unbreakable code!"
+    puts "\n Play as the Codebreaker to guess the code, or"
+    puts ' play as the Codemaster to create an unbreakable code!'
     puts ' Both Player and Computer must guess the secret code within 12 turns to win.'
     puts ' Left side of the board displays the guesses to the code,'
     puts ' while the Right side will display the feedback to the guesses.'
