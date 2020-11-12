@@ -60,10 +60,10 @@ class Mastermind
     puts "\n Would you like to play as Codebreaker or Codemaster?"
     puts ' - Codebreaker: guess the secret code computer came up with'
     puts ' - Codemaster: come up with a secret code and computer will try to guess it'
-    print "\n Type [1] for Codebreaker or [2] for Codemaker: "
+    print "\n Type [1] for Codebreaker or [2] for Codemaster: "
     input = gets.chomp.to_i
     until input == 1 || input == 2
-      print " Sorry, didn't catch that. \nType [1] for Codebreaker or [2] for Codemaker: "
+      print " Sorry, didn't catch that. \nType [1] for Codebreaker or [2] for Codemaster: "
       input = gets.chomp.to_i
     end
 
