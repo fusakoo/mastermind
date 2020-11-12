@@ -14,7 +14,6 @@ V1: Codebreaker mode now available (10/06/2020)
 ### TODO
 - Optimize CPU codebreaker algorithm  
 Currently it's not the smartest. It will shuffle through the guess with 4 red/white peg feedback thus there is a possibility it will not be able to guess the secret code within 12 turns.
-- Organize/clean-up code and add more documentation
 
 ---
 

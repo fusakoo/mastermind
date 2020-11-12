@@ -16,7 +16,7 @@ class Player
     # let user create a code from 6 diff colors
     puts "\n --------------------------------------------------------------------"
     puts "\n You will now be setting the secret code computer will try to guess."
-    puts " Enter a combination of 4 colors separated by space. You may repeat colors."
+    puts ' Enter a combination of 4 colors separated by space. You may repeat colors.'
     puts " Your choices are: #{colorize_choices(Board.code_colors)}"
     puts " - Example code: #{colorize_choices(%w[red red blue cyan])}"
     print "\n Please enter your secret code: "
@@ -40,11 +40,13 @@ class Player
       end
 
       color_choices = Board.code_colors
-      if !color_choices.include?(@code[0]) || !color_choices.include?(@code[1]) || !color_choices.include?(@code[2]) || !color_choices.include?(@code[3])
+      if !color_choices.include?(@code[0]) ||
+         !color_choices.include?(@code[1]) ||
+         !color_choices.include?(@code[2]) ||
+         !color_choices.include?(@code[3])
         print "\n You can only enter the colors specified. Try again: "
         redo
       end
-
       @code
     end
   end

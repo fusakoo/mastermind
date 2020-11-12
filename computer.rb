@@ -14,8 +14,8 @@ class Computer
   end
 
   def self.generate_code
-    print " Computer is generating the code"
-    self.print_dots
+    print ' Computer is generating the code'
+    print_dots
     @secret_code = []
 
     4.times do
@@ -23,43 +23,42 @@ class Computer
       @secret_code << random_color
     end
 
-    puts " Alright, let the game begin!"
+    puts ' Alright, let the game begin!'
     sleep(1)
     # computer generate a random code (1296 variations)
   end
 
   def self.guess_code(feedback, turn)
-    print " Computer is guessing the code"
-    self.print_dots
+    print ' Computer is guessing the code'
+    print_dots
 
     while turn < 13
+      current_turn = feedback[turn - 2].colors
+
       if turn == 1
         # start off the guess by 4 reds, and go from there
-        4.times do
-          @code << Board.code_colors[@guess_index]
-        end
-        @guess_index += 1
+        try_different_color
       elsif @shuffle_guesses
-        @code = @code.shuffle while @past_shuffle.include?(@code)
-        @past_shuffle << @code
-      elsif feedback[turn - 2].colors.include?('black')
-        # check the feedback on each guess. If correct, sort into the correct peg set
-        self.update_correct_set(feedback, turn)
-        self.reset_code
-
-        @correct_set.each do |color|
-          @code << color
-        end
-        @code << Board.code_colors[@guess_index] until @code.length == 4
-        @guess_index += 1
+        shuffle_code
+      elsif current_turn.include?('black')
+        # check the feedback on each guess.
+        # if correct, sort into the correct peg set & try the next color
+        update_correct_set(feedback, turn)
+        reset_code
+        update_code
+        try_different_color
       else
         @shuffle_guesses = true
         @past_shuffle << @code
-        @code = @code.shuffle while @past_shuffle.include?(@code)
-        @past_shuffle << @code
+        shuffle_code
       end
       return @code
     end
+  end
+
+  def self.shuffle_code
+    @code = @code.shuffle while @past_shuffle.include?(@code)
+    @past_shuffle << @code
   end
 
   # helper method to count multiple values in array
@@ -68,20 +67,34 @@ class Computer
   end
 
   def self.update_correct_set(feedback, turn)
-    if self.count_all(feedback[turn - 2].colors, @bingo_colors) > self.count_all(feedback[turn - 3].colors, @bingo_colors)
-      self.reset_correct_set
-      feedback[turn - 2].colors.each_with_index do |color, index|
+    current_turn = feedback[turn - 2].colors
+    previous_turn = feedback[turn - 3].colors
+    if count_all(current_turn, @bingo_colors) > count_all(previous_turn, @bingo_colors)
+      reset_correct_set
+      current_turn.each_with_index do |color, index|
         @correct_set << @code[index] if @bingo_colors.include?(color)
       end
     end
+    @correct_set
+  end
+
+  def self.update_code
+    @correct_set.each do |color|
+      @code << color
+    end
+  end
+
+  def self.reset_correct_set
+    @correct_set = []
   end
 
   def self.reset_code
     @code = []
   end
 
-  def self.reset_correct_set
-    @correct_set = []
+  def self.try_different_color
+    @code << Board.code_colors[@guess_index] until @code.length == 4
+    @guess_index += 1
   end
 
   def self.print_dots

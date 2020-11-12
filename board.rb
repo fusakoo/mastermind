@@ -45,6 +45,7 @@ class Board
   end
 
   def check_guess(turn)
+    # create a copy for wrong position peg comparison
     @current_guess = Array.new(@guesses[turn].colors)
     @temporary_solution = Array.new(@solution)
 
@@ -52,28 +53,31 @@ class Board
     check_wrong_pegs
 
     pegs = []
-    @correct_pegs.times { pegs << 'red' }
-    @wrong_position_pegs.times { pegs << 'white' }
-    pegs << 'black' until pegs.length == 4
-
+    update_feedback_pegs(pegs)
     @feedback[turn] = Feedback.new(pegs[0], pegs[1], pegs[2], pegs[3])
   end
 
   def check_correct_pegs(turn)
     @correct_pegs = 0
-
+    # set the values that are correct as nil to be compacted in check_wrong_pegs
     @guesses[turn].colors.each_with_index do |color, index|
-      if @solution[index] == color
-        @current_guess[index] = nil
-        @temporary_solution[index] = nil
-        @correct_pegs += 1
-      end
+      next unless @solution[index] == color
+      @current_guess[index] = nil
+      @temporary_solution[index] = nil
+      @correct_pegs += 1
     end
   end
 
   def check_wrong_pegs
+    # remove the nil values so that the remainder can be checked for color matches
     @current_guess = @current_guess.compact
     @temporary_solution = @temporary_solution.compact
     @wrong_position_pegs = @temporary_solution.intersection(@current_guess).length
+  end
+
+  def update_feedback_pegs(pegs)
+    @correct_pegs.times { pegs << 'red' }
+    @wrong_position_pegs.times { pegs << 'white' }
+    pegs << 'black' until pegs.length == 4
   end
 end

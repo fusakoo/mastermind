@@ -1,4 +1,4 @@
-#class to store the secret code
+# class to store the secret code
 class Code
   attr_accessor :colors
 

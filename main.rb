@@ -1,14 +1,12 @@
 # Mastermind
-# Codemaker: create 4 color combination (color can be repeated ; 6^4 = 1296 possibilities)
-# Codebreaker: guess within 12 turns the combination
+# Codemaker: create 4 color (6^4 = 1296) combination (color can be repeated)
+# Codebreaker: guess the secret code within 12 turns
 
 require_relative 'player'
 require_relative 'computer'
 require_relative 'board'
 require_relative 'feedback'
 require_relative 'colorize'
-
-require 'pry'
 
 class Mastermind
   attr_accessor :board, :turns, :code_colors
@@ -30,31 +28,37 @@ class Mastermind
   end
 
   def introduction
-    puts " --------------------------------------------------------------------"
-    puts " ╔╦╗┌─┐┌─┐┌┬┐┌─┐┬─┐┌┬┐┬┌┐┌┌┬┐"
-    puts " ║║║├─┤└─┐ │ ├┤ ├┬┘│││││││ ││"
-    puts " ╩ ╩┴ ┴└─┘ ┴ └─┘┴└─┴ ┴┴┘└┘─┴┘"
-    puts " --------------------------------------------------------------------"
-    puts "\n Play as the Codebreaker to guess the code, or play as Codemaster to make unbreakable code!"
-    puts " Both Player and Computer must guess the secret code within 12 turns to win."
-    puts " Left side of the board displays the guesses to the code,"
-    puts " while the Right side will display the feedback to the guesses."
+    puts ' --------------------------------------------------------------------'
+    puts ' ╔╦╗┌─┐┌─┐┌┬┐┌─┐┬─┐┌┬┐┬┌┐┌┌┬┐'
+    puts ' ║║║├─┤└─┐ │ ├┤ ├┬┘│││││││ ││'
+    puts ' ╩ ╩┴ ┴└─┘ ┴ └─┘┴└─┴ ┴┴┘└┘─┴┘'
+    puts ' --------------------------------------------------------------------'
+    explain_instruction
+    explain_feedback
 
+    @board.display_board
+  end
+
+  def explain_instruction
+    puts "\n Play as the Codebreaker to guess the code, or play as Codemaster to make unbreakable code!"
+    puts ' Both Player and Computer must guess the secret code within 12 turns to win.'
+    puts ' Left side of the board displays the guesses to the code,'
+    puts ' while the Right side will display the feedback to the guesses.'
+  end
+
+  def explain_feedback
     puts "\n Feedback peg (*) reference: "
     puts " #{colorize_string('*', 'red')} Red: a guess is in the correct position and correct color"
     puts " #{colorize_string('*', 'white')} White: a guess is the correct color BUT in the wrong position"
     puts " #{colorize_string('*', 'black')} Black: a guess is neither correct in color / position"
-
-    @board.display_board
-    # provide general overview of the game
   end
 
   def define_role
     # defines the player's name and role
     puts "\n --------------------------------------------------------------------"
     puts "\n Would you like to play as Codebreaker or Codemaster?"
-    puts " - Codebreaker: guess the secret code computer came up with"
-    puts " - Codemaster: come up with a secret code and computer will try to guess it"
+    puts ' - Codebreaker: guess the secret code computer came up with'
+    puts ' - Codemaster: come up with a secret code and computer will try to guess it'
     print "\n Type [1] for Codebreaker or [2] for Codemaker: "
     input = gets.chomp.to_i
     until input == 1 || input == 2
@@ -62,13 +66,16 @@ class Mastermind
       input = gets.chomp.to_i
     end
 
+    assign_role(input)
+    puts "\n Great, you will be #{@player.role.capitalize} for this game!"
+  end
+
+  def assign_role(input)
     if input == 1
       @player = Player.new('codebreaker')
     elsif input == 2
       @player = Player.new('codemaster')
     end
-
-    puts "\n Great, you will be #{@player.role.capitalize} for this game!"
   end
 
   def set_secret_code
