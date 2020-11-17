@@ -8,10 +8,10 @@ CLI-based [Mastermind](https://en.wikipedia.org/wiki/Mastermind_(board_game)) ga
 ### Installation
 Using your Terminal/Command Line, clone the repository into your local Ruby workspace.
 ```
-git clone https://github.com/fusakoo/mastermind.git
-cd mastermind
-bundle install
-ruby main.rb
+$ git clone https://github.com/fusakoo/mastermind.git
+$ cd mastermind
+$ bundle install
+$ ruby main.rb
 ```
 ---
 
