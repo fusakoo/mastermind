@@ -1,5 +1,5 @@
 # Mastermind
-CLI-based [Mastermind](https://en.wikipedia.org/wiki/Mastermind_(board_game)) game built in Ruby.
+CLI-based [Mastermind](https://en.wikipedia.org/wiki/Mastermind_(board_game)) game built in Ruby. [Demo link](https://replit.com/@fusakoo/mastermind-1).
 
 ![preview](/preview.gif)
 
